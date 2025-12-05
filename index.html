@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Keuangan Mahasiswa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, button, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Manajemen Keuangan Mahasiswa</h1>
+
+        <h3>Tambah Pencatatan Keuangan</h3>
+        <input id="nama" type="text" placeholder="Nama pengeluaran/pemasukan" />
+        <input id="jumlah" type="number" placeholder="Jumlah (Rp)" />
+        <select id="tipe">
+            <option value="pemasukan">Pemasukan</option>
+            <option value="pengeluaran">Pengeluaran</option>
+        </select>
+        <button onclick="tambahData()">Tambah</button>
+
+        <h3>Daftar Keuangan</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Jumlah</th>
+                    <th>Tipe</th>
+                </tr>
+            </thead>
+            <tbody id="tabel"></tbody>
+        </table>
+
+        <h3>Total</h3>
+        <p id="totalPemasukan">Total Pemasukan: Rp 0</p>
+        <p id="totalPengeluaran">Total Pengeluaran: Rp 0</p>
+        <p id="saldoAkhir"><b>Saldo Akhir: Rp 0</b></p>
+    </div>
+
+<script>
+    let data = [];
+
+    function tambahData() {
+        const nama = document.getElementById('nama').value;
+        const jumlah = parseInt(document.getElementById('jumlah').value);
+        const tipe = document.getElementById('tipe').value;
+
+        if (!nama || !jumlah) {
+            alert("Isi semua data!");
+            return;
+        }
+
+        data.push({ nama, jumlah, tipe });
+        render();
+    }
+
+    function render() {
+        let tabel = document.getElementById('tabel');
+        tabel.innerHTML = '';
+
+        let totalPemasukan = 0;
+        let totalPengeluaran = 0;
+
+        data.forEach(item => {
+            let row = `<tr>
+                <td>${item.nama}</td>
+                <td>Rp ${item.jumlah.toLocaleString()}</td>
+                <td>${item.tipe}</td>
+            </tr>`;
+            tabel.innerHTML += row;
+
+            if (item.tipe === 'pemasukan') totalPemasukan += item.jumlah;
+            else totalPengeluaran += item.jumlah;
+        });
+
+        document.getElementById('totalPemasukan').innerText = `Total Pemasukan: Rp ${totalPemasukan.toLocaleString()}`;
+        document.getElementById('totalPengeluaran').innerText = `Total Pengeluaran: Rp ${totalPengeluaran.toLocaleString()}`;
+
+        const saldo = totalPemasukan - totalPengeluaran;
+        document.getElementById('saldoAkhir').innerHTML = `<b>Saldo Akhir: Rp ${saldo.toLocaleString()}</b>`;
+    }
+</script>
+</body>
+</html>
